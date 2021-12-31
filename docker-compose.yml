@@ -17,10 +17,17 @@ services:
     volumes:
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
   
-  web:
+  load_data:
     build: .
     ports:
       - 5000:5000
     networks:
       - default
     restart: always
+
+  metabase:
+    image: metabase/metabase
+    ports:
+      - 3000:3000
+    volumes:
+      - ./metabase_archive/metabase.db.mv.db:/metabase.db/metabase.db.mv.db
