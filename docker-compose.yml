@@ -19,11 +19,11 @@ services:
   
   load_data:
     build: .
-    ports:
-      - 5000:5000
     networks:
       - default
-    restart: always
+    depends_on:
+      - postgres
+    restart: "on-failure"
 
   metabase:
     image: metabase/metabase
