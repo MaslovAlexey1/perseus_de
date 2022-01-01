@@ -16,31 +16,42 @@ password: perseus1
 ```
 SELECT 
 c2.title,
-round(avg(extract(epoch from c."completedDate"  - c."startDate" )/3600/24)) avg_course_complete_days
+round(avg(extract(epoch from c."completedDate"  - c."startDate" )/3600/24)) avg_complete_days
 FROM certificates c 
 JOIN courses c2 ON c.course = c2.id
 GROUP BY c2.title
-ORDER BY avg_course_complete_days DESC 
+ORDER BY avg_complete_days DESC 
 ;
 ```
 
 **average amount of users time spent in a course**  [link](http://0.0.0.0:3000/question/33-average-amount-of-users-time-spent-in-a-course)
 ```
-SELECT
-round(avg(extract(epoch from c."completedDate" - c."startDate" )/3600/24)) course_duration_days
+with user_time_spend as (SELECT
+c.course,
+c.user,
+sum(c."completedDate"  - c."startDate") time_spend
 FROM certificates c
+group by c.course, c.user) 
+SELECT
+extract(epoch from avg(time_spend))/3600/24 time_spend_days
+from user_time_spend
 ;
 ```
 
 **average amount of users time spent for each course individually** [link](http://0.0.0.0:3000/question/34-average-amount-of-users-time-spent-for-each-course-individually)
 ```
-SELECT 
-c2.title,
-round(avg(extract(epoch from c."completedDate"  - c."startDate" )/3600/24)) avg_course_complete_days
-FROM certificates c 
-JOIN courses c2 ON c.course = c2.id
-GROUP BY c2.title
-ORDER BY avg_course_complete_days DESC 
+with user_time_spend as (SELECT
+c.course,
+c.user,
+sum(c."completedDate"  - c."startDate") time_spend
+FROM certificates c
+group by c.course, c.user) 
+SELECT
+c.title,
+extract(epoch from avg(time_spend))/3600/24 time_spend_days
+from user_time_spend uts 
+join courses c on uts.course = c.id
+group by c.title
 ;
 ```
 
@@ -87,3 +98,7 @@ avg(uc.count_dist_certificates) avg_dist_certificates_per_user
 FROM user_cert uc
 ;
 ```
+
+## Bonus points
+
+[Dashboard](http://0.0.0.0:3000/dashboard/1-analytics)
