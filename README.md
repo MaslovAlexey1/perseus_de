@@ -83,7 +83,7 @@ ORDER BY c.title, user_status
 ;
 ```
 
-**amount of certificates per customer** [link](http://0.0.0.0:3000/question/36-amount-of-certificates-per-customer)
+**amount of certificates per customer** **customer and user are the same?** [link](http://0.0.0.0:3000/question/36-amount-of-certificates-per-customer)
 ```
 WITH user_cert AS (
 	SELECT 
